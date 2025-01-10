@@ -15,7 +15,7 @@
 	origin_tech = list(TECH_BLUESPACE = 4)
 
 /obj/item/teleportation_scroll/attack_self(mob/user as mob)
-	if((user.mind && !wizards.is_antagonist(user.mind)))
+	if((user.mind && !GLOB.wizards.is_antagonist(user.mind)))
 		to_chat(user, span_warning("You stare at the scroll but cannot make sense of the markings!"))
 		return
 
@@ -46,10 +46,10 @@
 	return
 
 /obj/item/teleportation_scroll/proc/teleportscroll(var/mob/user)
-	var/A = tgui_input_list(user, "Area to jump to:", "Teleportation Scroll", teleportlocs)
+	var/A = tgui_input_list(user, "Area to jump to:", "Teleportation Scroll", GLOB.teleportlocs)
 	if(!A)
 		return
-	var/area/thearea = teleportlocs[A]
+	var/area/thearea = GLOB.teleportlocs[A]
 
 	if (user.stat || user.restrained())
 		return

@@ -1,4 +1,4 @@
-var/global/mob/living/carbon/human/dummy/mannequin/sleevemate_mob
+GLOBAL_DATUM(sleevemate_mob, /mob/living/carbon/human/dummy/mannequin)
 
 //SleeveMate!
 /obj/item/sleevemate
@@ -183,7 +183,7 @@ var/global/mob/living/carbon/human/dummy/mannequin/sleevemate_mob
 		return
 
 	var/target_ref = href_list["target"]
-	var/mob/living/target = locate(target_ref) in mob_list
+	var/mob/living/target = locate(target_ref) in GLOB.mob_list
 	if(!target)
 		to_chat(usr,span_warning("Unable to operate on that target."))
 		return
@@ -194,7 +194,7 @@ var/global/mob/living/carbon/human/dummy/mannequin/sleevemate_mob
 
 	//The actual options
 	if(href_list["mindscan"])
-		if(!target.mind || (target.mind.name in prevent_respawns))
+		if(!target.mind || (target.mind.name in GLOB.prevent_respawns))
 			to_chat(usr,span_warning("Target seems totally braindead."))
 			return
 
@@ -231,7 +231,7 @@ var/global/mob/living/carbon/human/dummy/mannequin/sleevemate_mob
 		return
 
 	if(href_list["mindsteal"])
-		if(!target.mind || (target.mind.name in prevent_respawns))
+		if(!target.mind || (target.mind.name in GLOB.prevent_respawns))
 			to_chat(usr,span_warning("Target seems totally braindead."))
 			return
 
@@ -268,11 +268,11 @@ var/global/mob/living/carbon/human/dummy/mannequin/sleevemate_mob
 			return //Uninstalled it?
 
 		//Lazzzyyy.
-		if(!sleevemate_mob)
-			sleevemate_mob = new()
+		if(!GLOB.sleevemate_mob)
+			GLOB.sleevemate_mob = new()
 
-		put_mind(sleevemate_mob)
-		SC.catch_mob(sleevemate_mob)
+		put_mind(GLOB.sleevemate_mob)
+		SC.catch_mob(GLOB.sleevemate_mob)
 		to_chat(usr,span_notice("Mind transferred into Soulcatcher!"))
 
 	if(href_list["mindupload"])

@@ -1,4 +1,4 @@
-var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
+GLOBAL_LIST_INIT(valid_bloodtypes, list("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"))
 
 /datum/preferences
 	var/equip_preview_mob = EQUIP_PREVIEW_ALL
@@ -28,26 +28,26 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 
 	// Grandfather in anyone loading paths from a save.
 	if(ispath(ear_style, /datum/sprite_accessory))
-		var/datum/sprite_accessory/instance = global.ear_styles_list[ear_style]
+		var/datum/sprite_accessory/instance = GLOB.ear_styles_list[ear_style]
 		if(istype(instance))
 			ear_style = instance.name
 	if(ispath(wing_style, /datum/sprite_accessory))
-		var/datum/sprite_accessory/instance = global.wing_styles_list[wing_style]
+		var/datum/sprite_accessory/instance = GLOB.wing_styles_list[wing_style]
 		if(istype(instance))
 			wing_style = instance.name
 	if(ispath(tail_style, /datum/sprite_accessory))
-		var/datum/sprite_accessory/instance = global.tail_styles_list[tail_style]
+		var/datum/sprite_accessory/instance = GLOB.tail_styles_list[tail_style]
 		if(istype(instance))
 			tail_style = instance.name
 
 	// Sanitize for non-existent keys.
-	if(ear_style && !(ear_style in get_available_styles(global.ear_styles_list)))
+	if(ear_style && !(ear_style in get_available_styles(GLOB.ear_styles_list)))
 		ear_style = null
-	if(ear_secondary_style && !(ear_secondary_style in get_available_styles(global.ear_styles_list)))
+	if(ear_secondary_style && !(ear_secondary_style in get_available_styles(GLOB.ear_styles_list)))
 		ear_secondary_style = null
-	if(wing_style && !(wing_style in get_available_styles(global.wing_styles_list)))
+	if(wing_style && !(wing_style in get_available_styles(GLOB.wing_styles_list)))
 		wing_style = null
-	if(tail_style && !(tail_style in get_available_styles(global.tail_styles_list)))
+	if(tail_style && !(tail_style in get_available_styles(GLOB.tail_styles_list)))
 		tail_style = null
 
 /datum/preferences/proc/get_available_styles(var/style_list)
@@ -63,7 +63,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		.[instance.name] = instance
 
 /datum/preferences/proc/mass_edit_marking_list(var/marking, var/change_on = TRUE, var/change_color = TRUE, var/marking_value = null, var/on = TRUE, var/color = "#000000")
-	var/datum/sprite_accessory/marking/mark_datum = body_marking_styles_list[marking]
+	var/datum/sprite_accessory/marking/mark_datum = GLOB.body_marking_styles_list[marking]
 	var/list/new_marking = marking_value||mark_datum.body_parts
 	for (var/NM in new_marking)
 		if (marking_value && !islist(new_marking[NM])) continue
@@ -133,8 +133,8 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	if(!pref.species || !(pref.species in GLOB.playable_species))
 		pref.species = SPECIES_HUMAN
 	pref.s_tone			= sanitize_integer(pref.s_tone, -185, 34, initial(pref.s_tone))
-	pref.h_style		= sanitize_inlist(pref.h_style, hair_styles_list, initial(pref.h_style))
-	pref.f_style		= sanitize_inlist(pref.f_style, facial_hair_styles_list, initial(pref.f_style))
+	pref.h_style		= sanitize_inlist(pref.h_style, GLOB.hair_styles_list, initial(pref.h_style))
+	pref.f_style		= sanitize_inlist(pref.f_style, GLOB.facial_hair_styles_list, initial(pref.f_style))
 	pref.grad_style		= sanitize_inlist(pref.grad_style, GLOB.hair_gradients, initial(pref.grad_style))
 	pref.b_type			= sanitize_text(pref.b_type, initial(pref.b_type))
 
@@ -142,7 +142,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	if(!pref.organ_data) pref.organ_data = list()
 	if(!pref.rlimb_data) pref.rlimb_data = list()
 	if(!pref.body_markings) pref.body_markings = list()
-	else pref.body_markings &= body_marking_styles_list
+	else pref.body_markings &= GLOB.body_marking_styles_list
 	for (var/M in pref.body_markings) //VOREStation Edit
 		if (!islist(pref.body_markings[M]))
 			var/col = istext(pref.body_markings[M]) ? pref.body_markings[M] : "#000000"
@@ -183,24 +183,24 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		character.digitigrade = 0
 		pref.digitigrade = 0
 
-	var/list/ear_styles = pref.get_available_styles(global.ear_styles_list)
+	var/list/ear_styles = pref.get_available_styles(GLOB.ear_styles_list)
 	character.ear_style =  ear_styles[pref.ear_style]
 
 	// apply secondary ears; sanitize again to prevent runtimes in rendering
 	character.ear_secondary_style = ear_styles[pref.ear_secondary_style]
 	character.ear_secondary_colors = SANITIZE_LIST(pref.ear_secondary_colors)
 
-	var/list/tail_styles = pref.get_available_styles(global.tail_styles_list)
+	var/list/tail_styles = pref.get_available_styles(GLOB.tail_styles_list)
 	character.tail_style = tail_styles[pref.tail_style]
 
-	var/list/wing_styles = pref.get_available_styles(global.wing_styles_list)
+	var/list/wing_styles = pref.get_available_styles(GLOB.wing_styles_list)
 	character.wing_style = wing_styles[pref.wing_style]
 
 	character.set_gender(pref.biological_gender)
 
 	// Destroy/cyborgize organs and limbs.
 	//VOREStation Edit
-	character.synthetic = pref.species == "Protean" ? all_robolimbs["protean"] : null //Clear the existing var. (unless protean, then switch it to the normal protean limb)
+	character.synthetic = pref.species == "Protean" ? GLOB.all_robolimbs["protean"] : null //Clear the existing var. (unless protean, then switch it to the normal protean limb)
 	var/list/organs_to_edit = list()
 	for (var/name in list(BP_TORSO, BP_HEAD, BP_GROIN, BP_L_ARM, BP_R_ARM, BP_L_HAND, BP_R_HAND, BP_L_LEG, BP_R_LEG, BP_L_FOOT, BP_R_FOOT))
 		var/obj/item/organ/external/O = character.organs_by_name[name]
@@ -246,7 +246,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	var/priority = 0
 	for(var/M in pref.body_markings)
 		priority += 1
-		var/datum/sprite_accessory/marking/mark_datum = body_marking_styles_list[M]
+		var/datum/sprite_accessory/marking/mark_datum = GLOB.body_marking_styles_list[M]
 		//var/mark_color = "[pref.body_markings[M]]" //VOREStation Edit
 
 		for(var/BP in mark_datum.body_parts)
@@ -340,16 +340,16 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			if(ind > 1)
 				. += ", "
 
-			var/datum/robolimb/R = basic_robolimb
+			var/datum/robolimb/R = GLOB.basic_robolimb
 			var/key = pref.rlimb_data[name]
 			if(!istext(key))
 				log_debug("Bad rlimb_data for [key_name(pref.client)], [name] was set to [key]")
 				to_chat(usr, span_warning("Error loading robot limb data for `[name]`, clearing pref."))
 				pref.rlimb_data -= name
 			else
-				R = LAZYACCESS(all_robolimbs, key)
+				R = LAZYACCESS(GLOB.all_robolimbs, key)
 				if(!istype(R))
-					R = basic_robolimb
+					R = GLOB.basic_robolimb
 			. += "\t[R.company] [organ_name] prosthesis"
 		else if(status == "amputated")
 			++ind
@@ -433,7 +433,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 
 	. += "<h2>Genetics Settings</h2>"
 
-	var/list/ear_styles = pref.get_available_styles(global.ear_styles_list)
+	var/list/ear_styles = pref.get_available_styles(GLOB.ear_styles_list)
 	var/datum/sprite_accessory/ears/ear = ear_styles[pref.ear_style]
 	. += span_bold("Ears") + "<br>"
 	if(istype(ear))
@@ -456,7 +456,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	else
 		. += " Style: <a href='byond://?src=\ref[src];ear_secondary_style=1'>Select</a><br>"
 
-	var/list/tail_styles = pref.get_available_styles(global.tail_styles_list)
+	var/list/tail_styles = pref.get_available_styles(GLOB.tail_styles_list)
 	var/datum/sprite_accessory/tail/tail = tail_styles[pref.tail_style]
 	. += span_bold("Tail") + "<br>"
 	if(istype(tail))
@@ -470,7 +470,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 	else
 		. += " Style: <a href='byond://?src=\ref[src];tail_style=1'>Select</a><br>"
 
-	var/list/wing_styles = pref.get_available_styles(global.wing_styles_list)
+	var/list/wing_styles = pref.get_available_styles(GLOB.wing_styles_list)
 	var/datum/sprite_accessory/wing/wings = wing_styles[pref.wing_style]
 	. += span_bold("Wing") + "<br>"
 	if(istype(wings))
@@ -519,7 +519,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 					return TOPIC_REFRESH
 
 	else if(href_list["blood_type"])
-		var/new_b_type = tgui_input_list(user, "Choose your character's blood-type:", "Character Preference", valid_bloodtypes)
+		var/new_b_type = tgui_input_list(user, "Choose your character's blood-type:", "Character Preference", GLOB.valid_bloodtypes)
 		if(new_b_type && CanUseTopic(user))
 			pref.b_type = new_b_type
 			return TOPIC_REFRESH
@@ -562,7 +562,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 					pref.h_style = pick(valid_hairstyles)
 			else
 				//this shouldn't happen
-				pref.h_style = hair_styles_list["Bald"]
+				pref.h_style = GLOB.hair_styles_list["Bald"]
 
 			//grab one of the valid facial hair styles for the newly chosen species
 			var/list/valid_facialhairstyles = pref.get_valid_facialhairstyles()
@@ -572,7 +572,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 					pref.f_style = pick(valid_facialhairstyles)
 			else
 				//this shouldn't happen
-				pref.f_style = facial_hair_styles_list["Shaved"]
+				pref.f_style = GLOB.facial_hair_styles_list["Shaved"]
 
 			//reset hair colour and skin colour
 			pref.update_preference_by_type(/datum/preference/color/human/hair_color, "#000000")
@@ -712,7 +712,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["marking_style"])
-		var/list/usable_markings = pref.body_markings.Copy() ^ body_marking_styles_list.Copy()
+		var/list/usable_markings = pref.body_markings.Copy() ^ GLOB.body_marking_styles_list.Copy()
 		/* VOREStation Removal - No markings whitelist, let people mix/match
 		for(var/M in usable_markings)
 			var/datum/sprite_accessory/S = usable_markings[M]
@@ -912,8 +912,8 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			if("Prosthesis")
 				var/tmp_species = pref.species ? pref.species : SPECIES_HUMAN
 				var/list/usable_manufacturers = list()
-				for(var/company in chargen_robolimbs)
-					var/datum/robolimb/M = chargen_robolimbs[company]
+				for(var/company in GLOB.chargen_robolimbs)
+					var/datum/robolimb/M = GLOB.chargen_robolimbs[company]
 					if(!(limb in M.parts))
 						continue
 					if(tmp_species in M.species_cannot_use)
@@ -1050,7 +1050,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["ear_style"])
-		var/new_ear_style = tgui_input_list(user, "Select an ear style for this character:", "Character Preference", pref.get_available_styles(global.ear_styles_list), pref.ear_style)
+		var/new_ear_style = tgui_input_list(user, "Select an ear style for this character:", "Character Preference", pref.get_available_styles(GLOB.ear_styles_list), pref.ear_style)
 		if(new_ear_style)
 			pref.ear_style = new_ear_style
 
@@ -1078,7 +1078,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["ear_secondary_style"])
-		var/new_style = tgui_input_list(user, "Select an ear style for this character:", "Character Preference", pref.get_available_styles(global.ear_styles_list), pref.ear_secondary_style)
+		var/new_style = tgui_input_list(user, "Select an ear style for this character:", "Character Preference", pref.get_available_styles(GLOB.ear_styles_list), pref.ear_secondary_style)
 		if(!new_style)
 			return TOPIC_NOACTION
 		pref.ear_secondary_style = new_style
@@ -1104,7 +1104,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 		return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["tail_style"])
-		var/new_tail_style = tgui_input_list(user, "Select a tail style for this character:", "Character Preference", pref.get_available_styles(global.tail_styles_list), pref.tail_style)
+		var/new_tail_style = tgui_input_list(user, "Select a tail style for this character:", "Character Preference", pref.get_available_styles(GLOB.tail_styles_list), pref.tail_style)
 		if(new_tail_style)
 			pref.tail_style = new_tail_style
 		return TOPIC_REFRESH_UPDATE_PREVIEW
@@ -1131,7 +1131,7 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			return TOPIC_REFRESH_UPDATE_PREVIEW
 
 	else if(href_list["wing_style"])
-		var/new_wing_style = tgui_input_list(user, "Select a wing style for this character:", "Character Preference", pref.get_available_styles(global.wing_styles_list), pref.wing_style)
+		var/new_wing_style = tgui_input_list(user, "Select a wing style for this character:", "Character Preference", pref.get_available_styles(GLOB.wing_styles_list), pref.wing_style)
 		if(new_wing_style)
 			pref.wing_style = new_wing_style
 

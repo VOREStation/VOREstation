@@ -157,7 +157,7 @@ var/global/datum/controller/occupations/job_master
 			break
 
 /datum/controller/occupations/proc/ResetOccupations()
-	for(var/mob/new_player/player in player_list)
+	for(var/mob/new_player/player in GLOB.player_list)
 		if((player) && (player.mind))
 			player.mind.assigned_role = null
 			player.mind.special_role = null
@@ -234,7 +234,7 @@ var/global/datum/controller/occupations/job_master
 				break
 
 	//Get the players who are ready
-	for(var/mob/new_player/player in player_list)
+	for(var/mob/new_player/player in GLOB.player_list)
 		if(player.ready && player.mind && !player.mind.assigned_role)
 			unassigned += player
 
@@ -360,7 +360,7 @@ var/global/datum/controller/occupations/job_master
 	if(!joined_late)
 		var/obj/S = null
 		var/list/possible_spawns = list()
-		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+		for(var/obj/effect/landmark/start/sloc in GLOB.landmarks_list)
 			if(sloc.name != rank)	continue
 			if(locate(/mob/living) in sloc.loc)	continue
 			possible_spawns.Add(sloc)
@@ -391,7 +391,7 @@ var/global/datum/controller/occupations/job_master
 		var/list/custom_equip_leftovers = list()
 		if(H.client && H.client.prefs && H.client.prefs.gear && H.client.prefs.gear.len && !(job.mob_type & JOB_SILICON))
 			for(var/thing in H.client.prefs.gear)
-				var/datum/gear/G = gear_datums[thing]
+				var/datum/gear/G = GLOB.gear_datums[thing]
 				if(!G) //Not a real gear datum (maybe removed, as this is loaded from their savefile)
 					continue
 
@@ -452,7 +452,7 @@ var/global/datum/controller/occupations/job_master
 
 		// If some custom items could not be equipped before, try again now.
 		for(var/thing in custom_equip_leftovers)
-			var/datum/gear/G = gear_datums[thing]
+			var/datum/gear/G = GLOB.gear_datums[thing]
 			if(G.slot == slot_shoes && H.client?.prefs?.shoe_hater)	//RS ADD
 				continue
 			if(G.slot in custom_equip_slots)
@@ -475,7 +475,7 @@ var/global/datum/controller/occupations/job_master
 	if(H.mind && job.department_accounts)
 		var/remembered_info = ""
 		for(var/D in job.department_accounts)
-			var/datum/money_account/department_account = department_accounts[D]
+			var/datum/money_account/department_account = GLOB.department_accounts[D]
 			if(department_account)
 				remembered_info += span_bold("Department account number ([D]):") + " #[department_account.account_number]<br>"
 				remembered_info += span_bold("Department account pin ([D]):") + " [department_account.remote_access_pin]<br>"
@@ -509,7 +509,7 @@ var/global/datum/controller/occupations/job_master
 			if(!isnull(B))
 				for(var/thing in spawn_in_storage)
 					to_chat(H, span_notice("Placing \the [thing] in your [B.name]!"))
-					var/datum/gear/G = gear_datums[thing]
+					var/datum/gear/G = GLOB.gear_datums[thing]
 					var/metadata = H.client.prefs.gear[G.display_name]
 					G.spawn_item(B, metadata)
 			else
@@ -554,11 +554,11 @@ var/global/datum/controller/occupations/job_master
 
 	// It is VERY unlikely that we'll have two players, in the same round, with the same name and branch, but still, this is here.
 	// If such conflict is encountered, a random number will be appended to the email address. If this fails too, no email account will be created.
-	if(ntnet_global.does_email_exist(complete_login))
+	if(GLOB.ntnet_global.does_email_exist(complete_login))
 		complete_login = "[sanitized_name][random_id(/datum/computer_file/data/email_account/, 100, 999)]@[domain]"
 
 	// If even fallback login generation failed, just don't give them an email. The chance of this happening is astronomically low.
-	if(ntnet_global.does_email_exist(complete_login))
+	if(GLOB.ntnet_global.does_email_exist(complete_login))
 		to_chat(H, span_filter_notice("You were not assigned an email address."))
 		H.mind.store_memory("You were not assigned an email address.")
 	else
@@ -626,7 +626,7 @@ var/global/datum/controller/occupations/job_master
 		var/level4 = 0 //never
 		var/level5 = 0 //banned
 		var/level6 = 0 //account too young
-		for(var/mob/new_player/player in player_list)
+		for(var/mob/new_player/player in GLOB.player_list)
 			if(!(player.ready && player.mind && !player.mind.assigned_role))
 				continue //This player is not ready
 			if(jobban_isbanned(player, job.title))
@@ -669,7 +669,7 @@ var/global/datum/controller/occupations/job_master
 				to_chat(C, span_warning("Your chosen spawnpoint ([C.prefs.read_preference(/datum/preference/choiced/living/spawnpoint)]) is unavailable for the current map. Spawning you at one of the enabled spawn points instead."))
 				spawnpos = null
 		else
-			spawnpos = spawntypes[C.prefs.read_preference(/datum/preference/choiced/living/spawnpoint)]
+			spawnpos = GLOB.spawntypes[C.prefs.read_preference(/datum/preference/choiced/living/spawnpoint)]
 
 	//We will return a list key'd by "turf" and "msg"
 	. = list("turf","msg")

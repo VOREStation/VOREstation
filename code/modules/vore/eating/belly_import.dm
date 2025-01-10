@@ -424,13 +424,13 @@
 		if(istext(belly_data["contamination_flavor"]))
 			var/new_contamination_flavor = sanitize(belly_data["contamination_flavor"],MAX_MESSAGE_LEN,0,0,0)
 			if(new_contamination_flavor)
-				if(new_contamination_flavor in contamination_flavors)
+				if(new_contamination_flavor in GLOB.contamination_flavors)
 					new_belly.contamination_flavor = new_contamination_flavor
 
 		if(istext(belly_data["contamination_color"]))
 			var/new_contamination_color = sanitize(belly_data["contamination_color"],MAX_MESSAGE_LEN,0,0,0)
 			if(new_contamination_color)
-				if(new_contamination_color in contamination_colors)
+				if(new_contamination_color in GLOB.contamination_colors)
 					new_belly.contamination_color = new_contamination_color
 
 		if(isnum(belly_data["nutrition_percent"]))
@@ -521,7 +521,7 @@
 		if(istext(belly_data["egg_type"]))
 			var/new_egg_type = sanitize(belly_data["egg_type"],MAX_MESSAGE_LEN,0,0,0)
 			if(new_egg_type)
-				if(new_egg_type in global_vore_egg_types)
+				if(new_egg_type in GLOB.global_vore_egg_types)
 					new_belly.egg_type = new_egg_type
 
 		/* Not implemented on virgo
@@ -612,30 +612,30 @@
 				new_belly.fancy_vore = TRUE
 
 		if(new_belly.fancy_vore)
-			if(!(new_belly.vore_sound in fancy_vore_sounds))
+			if(!(new_belly.vore_sound in GLOB.fancy_vore_sounds))
 				new_belly.vore_sound = "Gulp"
-			if(!(new_belly.release_sound in fancy_vore_sounds))
+			if(!(new_belly.release_sound in GLOB.fancy_vore_sounds))
 				new_belly.release_sound = "Splatter"
 		else
-			if(!(new_belly.vore_sound in classic_vore_sounds))
+			if(!(new_belly.vore_sound in GLOB.classic_vore_sounds))
 				new_belly.vore_sound = "Gulp"
-			if(!(new_belly.release_sound in classic_vore_sounds))
+			if(!(new_belly.release_sound in GLOB.classic_vore_sounds))
 				new_belly.release_sound = "Splatter"
 
 		if(istext(belly_data["vore_sound"]))
 			var/new_vore_sound = sanitize(belly_data["vore_sound"],MAX_MESSAGE_LEN,0,0,0)
 			if(new_vore_sound)
-				if (new_belly.fancy_vore && (new_vore_sound in fancy_vore_sounds))
+				if (new_belly.fancy_vore && (new_vore_sound in GLOB.fancy_vore_sounds))
 					new_belly.vore_sound = new_vore_sound
-				if (!new_belly.fancy_vore && (new_vore_sound in classic_vore_sounds))
+				if (!new_belly.fancy_vore && (new_vore_sound in GLOB.classic_vore_sounds))
 					new_belly.vore_sound = new_vore_sound
 
 		if(istext(belly_data["release_sound"]))
 			var/new_release_sound = sanitize(belly_data["release_sound"],MAX_MESSAGE_LEN,0,0,0)
 			if(new_release_sound)
-				if (new_belly.fancy_vore && (new_release_sound in fancy_release_sounds))
+				if (new_belly.fancy_vore && (new_release_sound in GLOB.fancy_release_sounds))
 					new_belly.release_sound = new_release_sound
-				if (!new_belly.fancy_vore && (new_release_sound in classic_release_sounds))
+				if (!new_belly.fancy_vore && (new_release_sound in GLOB.classic_release_sounds))
 					new_belly.release_sound = new_release_sound
 
 		/* Not implemented on virgo
@@ -721,12 +721,12 @@
 		if(istext(belly_data["undergarment_chosen"]))
 			var/new_undergarment_chosen = sanitize(belly_data["undergarment_chosen"],MAX_MESSAGE_LEN,0,0,0)
 			if(new_undergarment_chosen)
-				for(var/datum/category_group/underwear/U in global_underwear.categories)
+				for(var/datum/category_group/underwear/U in GLOB.global_underwear.categories)
 					if(lowertext(U.name) == lowertext(new_undergarment_chosen))
 						new_belly.undergarment_chosen = U.name
 						break
 
-		var/datum/category_group/underwear/UWC = global_underwear.categories_by_name[new_belly.undergarment_chosen]
+		var/datum/category_group/underwear/UWC = GLOB.global_underwear.categories_by_name[new_belly.undergarment_chosen]
 		var/invalid_if_none = TRUE
 		for(var/datum/category_item/underwear/U in UWC.items)
 			if(lowertext(U.name) == lowertext(new_belly.undergarment_if_none))

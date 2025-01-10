@@ -179,7 +179,7 @@
 					data["virus"] += list(list("name" = v.fields["name"], "D" = "\ref[v]"))
 			if(MED_DATA_MEDBOT)
 				data["medbots"] = list()
-				for(var/mob/living/bot/medbot/M in mob_list)
+				for(var/mob/living/bot/medbot/M in GLOB.mob_list)
 					if(M.z != z)
 						continue
 					var/turf/T = get_turf(M)
@@ -499,8 +499,8 @@
 					R.fields["b_type"] = pick("A-", "B-", "AB-", "O-", "A+", "B+", "AB+", "O+")
 				if(5)
 					R.fields["p_stat"] = pick("*SSD*", "Active", "Physically Unfit", "Disabled")
-					if(PDA_Manifest.len)
-						PDA_Manifest.Cut()
+					if(GLOB.PDA_Manifest.len)
+						GLOB.PDA_Manifest.Cut()
 				if(6)
 					R.fields["m_stat"] = pick("*Insane*", "*Unstable*", "*Watch*", "Stable")
 			continue

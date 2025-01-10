@@ -63,7 +63,7 @@ var/list/all_technomancer_assistance = subtypesof(/datum/technomancer/assistance
 // Parameters: 1 (new_owner - mob that the book is trying to bind to)
 // Description: Links the catalog to hopefully the technomancer, so that only they can access it.
 /obj/item/technomancer_catalog/proc/bind_to_owner(var/mob/living/carbon/human/new_owner)
-	if(!owner && (technomancers.is_antagonist(new_owner.mind) || universal)) //VOREStation Edit - Universal catalogs
+	if(!owner && (GLOB.technomancers.is_antagonist(new_owner.mind) || universal)) //VOREStation Edit - Universal catalogs
 		owner = new_owner
 
 // Proc: New()
@@ -330,7 +330,7 @@ var/list/all_technomancer_assistance = subtypesof(/datum/technomancer/assistance
 					budget -= desired_object.cost
 					to_chat(H, span_notice("You have just bought \a [desired_object.name]."))
 					var/obj/O = new desired_object.obj_path(get_turf(H))
-					technomancer_belongings.Add(O) // Used for the Track spell.
+					GLOB.technomancer_belongings.Add(O) // Used for the Track spell.
 
 				else //Can't afford.
 					to_chat(H, span_danger("You can't afford that!"))

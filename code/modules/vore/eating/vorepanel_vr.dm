@@ -3,7 +3,7 @@
 //
 
 //INSERT COLORIZE-ONLY STOMACHS HERE
-var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
+GLOBAL_LIST_INIT(belly_colorable_only_fullscreens, list("a_synth_flesh_mono",
 														"a_synth_flesh_mono_hole",
 														"a_anim_belly",
 														"multi_layer_test_tummy",
@@ -15,7 +15,7 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 														"post_tumby_passage",
 														"post_tumby_passage_fluidless",
 														"not_quite_tumby",
-														"could_it_be_a_tumby")
+														"could_it_be_a_tumby"))
 
 /mob
 	var/datum/vore_look/vorePanel
@@ -310,7 +310,7 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 			//Why? I have no flipping clue. As you can see above, vore_colorized is included in the assets but isn't working. It makes no sense.
 			//I can only imagine this is a BYOND/TGUI issue with the cache. If you can figure out how to fix this and make it so you only need to
 			//include things in full_colorized_vore, that would be great. For now, this is the only workaround that I could get to work.
-			selected_list["possible_fullscreens"] -= belly_colorable_only_fullscreens
+			selected_list["possible_fullscreens"] -= GLOB.belly_colorable_only_fullscreens
 
 		var/list/selected_contents = list()
 		for(var/O in selected)
@@ -1081,14 +1081,14 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 			host.vore_selected.contaminates = !host.vore_selected.contaminates
 			. = TRUE
 		if("b_contamination_flavor")
-			var/list/menu_list = contamination_flavors.Copy()
+			var/list/menu_list = GLOB.contamination_flavors.Copy()
 			var/new_flavor = tgui_input_list(user, "Choose Contamination Flavor Text Type (currently [host.vore_selected.contamination_flavor])", "Flavor Choice", menu_list)
 			if(!new_flavor)
 				return FALSE
 			host.vore_selected.contamination_flavor = new_flavor
 			. = TRUE
 		if("b_contamination_color")
-			var/list/menu_list = contamination_colors.Copy()
+			var/list/menu_list = GLOB.contamination_colors.Copy()
 			var/new_color = tgui_input_list(user, "Choose Contamination Color (currently [host.vore_selected.contamination_color])", "Color Choice", menu_list)
 			if(!new_color)
 				return FALSE
@@ -1096,7 +1096,7 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 			host.vore_selected.items_preserved.Cut() //To re-contaminate for new color
 			. = TRUE
 		if("b_egg_type")
-			var/list/menu_list = global_vore_egg_types.Copy()
+			var/list/menu_list = GLOB.global_vore_egg_types.Copy()
 			var/new_egg_type = tgui_input_list(user, "Choose Egg Type (currently [host.vore_selected.egg_type])", "Egg Choice", menu_list)
 			if(!new_egg_type)
 				return FALSE
@@ -1506,9 +1506,9 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 		if("b_release")
 			var/choice
 			if(host.vore_selected.fancy_vore)
-				choice = tgui_input_list(user,"Currently set to [host.vore_selected.release_sound]","Select Sound", fancy_release_sounds)
+				choice = tgui_input_list(user,"Currently set to [host.vore_selected.release_sound]","Select Sound", GLOB.fancy_release_sounds)
 			else
-				choice = tgui_input_list(user,"Currently set to [host.vore_selected.release_sound]","Select Sound", classic_release_sounds)
+				choice = tgui_input_list(user,"Currently set to [host.vore_selected.release_sound]","Select Sound", GLOB.classic_release_sounds)
 
 			if(!choice)
 				return FALSE
@@ -1518,9 +1518,9 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 		if("b_releasesoundtest")
 			var/sound/releasetest
 			if(host.vore_selected.fancy_vore)
-				releasetest = fancy_release_sounds[host.vore_selected.release_sound]
+				releasetest = GLOB.fancy_release_sounds[host.vore_selected.release_sound]
 			else
-				releasetest = classic_release_sounds[host.vore_selected.release_sound]
+				releasetest = GLOB.classic_release_sounds[host.vore_selected.release_sound]
 
 			if(releasetest)
 				SEND_SOUND(user, releasetest)
@@ -1528,9 +1528,9 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 		if("b_sound")
 			var/choice
 			if(host.vore_selected.fancy_vore)
-				choice = tgui_input_list(user,"Currently set to [host.vore_selected.vore_sound]","Select Sound", fancy_vore_sounds)
+				choice = tgui_input_list(user,"Currently set to [host.vore_selected.vore_sound]","Select Sound", GLOB.fancy_vore_sounds)
 			else
-				choice = tgui_input_list(user,"Currently set to [host.vore_selected.vore_sound]","Select Sound", classic_vore_sounds)
+				choice = tgui_input_list(user,"Currently set to [host.vore_selected.vore_sound]","Select Sound", GLOB.classic_vore_sounds)
 
 			if(!choice)
 				return FALSE
@@ -1540,9 +1540,9 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 		if("b_soundtest")
 			var/sound/voretest
 			if(host.vore_selected.fancy_vore)
-				voretest = fancy_vore_sounds[host.vore_selected.vore_sound]
+				voretest = GLOB.fancy_vore_sounds[host.vore_selected.vore_sound]
 			else
-				voretest = classic_vore_sounds[host.vore_selected.vore_sound]
+				voretest = GLOB.classic_vore_sounds[host.vore_selected.vore_sound]
 			if(voretest)
 				SEND_SOUND(user, voretest)
 			. = TRUE
@@ -1850,7 +1850,7 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 			host.vore_selected.vore_sprite_flags ^= host.vore_selected.vore_sprite_flag_list[toggle_vs_flag]
 			. = TRUE
 		if("b_undergarment_choice")
-			var/datum/category_group/underwear/undergarment_choice = tgui_input_list(user, "Which undergarment do you want to enable when your [lowertext(host.vore_selected.name)] is filled?","Select Undergarment Class", global_underwear.categories)
+			var/datum/category_group/underwear/undergarment_choice = tgui_input_list(user, "Which undergarment do you want to enable when your [lowertext(host.vore_selected.name)] is filled?","Select Undergarment Class", GLOB.global_underwear.categories)
 			if(!undergarment_choice) //They cancelled, no changes
 				return FALSE
 			else
@@ -1858,7 +1858,7 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 				host.update_fullness()
 			. = TRUE
 		if("b_undergarment_if_none")
-			var/datum/category_group/underwear/UWC = global_underwear.categories_by_name[host.vore_selected.undergarment_chosen]
+			var/datum/category_group/underwear/UWC = GLOB.global_underwear.categories_by_name[host.vore_selected.undergarment_chosen]
 			var/datum/category_item/underwear/selected_underwear = tgui_input_list(user, "If no undergarment is equipped, which undergarment style do you want to use?","Select Underwear Style",UWC.items,host.vore_selected.undergarment_if_none)
 			if(!selected_underwear) //They cancelled, no changes
 				return FALSE
@@ -1873,7 +1873,7 @@ var/global/list/belly_colorable_only_fullscreens = list("a_synth_flesh_mono",
 				host.update_fullness()
 			. = TRUE
 		if("b_tail_to_change_to")
-			var/tail_choice = tgui_input_list(user, "Which tail sprite do you want to use when your [lowertext(host.vore_selected.name)] is filled?","Select Sprite", global.tail_styles_list)
+			var/tail_choice = tgui_input_list(user, "Which tail sprite do you want to use when your [lowertext(host.vore_selected.name)] is filled?","Select Sprite", GLOB.tail_styles_list)
 			if(!tail_choice) //They cancelled, no changes
 				return FALSE
 			else

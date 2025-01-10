@@ -14,7 +14,7 @@
 /obj/item/spellbook/attack_self(mob/user = usr)
 	if(!user)
 		return
-	if((user.mind && !wizards.is_antagonist(user.mind)))
+	if((user.mind && !GLOB.wizards.is_antagonist(user.mind)))
 		to_chat(usr, span_warning("You stare at the book but cannot make sense of the markings!"))
 		return
 
@@ -332,7 +332,7 @@
 
 /obj/item/spellbook/oneuse/mindswap/recoil(mob/user as mob)
 	..()
-	if(stored_swap in dead_mob_list)
+	if(stored_swap in GLOB.dead_mob_list)
 		stored_swap = null
 	if(!stored_swap)
 		stored_swap = user

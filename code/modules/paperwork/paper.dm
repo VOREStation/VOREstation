@@ -203,7 +203,7 @@
 		icon_state = "scrap"
 		return
 	user.examinate(src)
-	if(rigged && (Holiday == "April Fool's Day"))
+	if(rigged && (GLOB.Holiday == "April Fool's Day"))
 		if(spam_flag == 0)
 			spam_flag = 1
 			playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
@@ -393,7 +393,7 @@
 
 /obj/item/paper/proc/burnpaper(obj/item/flame/P, mob/user)
 	var/class = "warning"
-	var/datum/gender/TU = gender_datums[user.get_visible_gender()]
+	var/datum/gender/TU = GLOB.gender_datums[user.get_visible_gender()]
 
 	if(P.lit && !user.restrained())
 		if(istype(P, /obj/item/flame/lighter/zippo))

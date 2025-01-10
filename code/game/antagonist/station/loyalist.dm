@@ -1,4 +1,4 @@
-var/datum/antagonist/loyalists/loyalists
+GLOBAL_DATUM(loyalists, /datum/antagonist/loyalists)
 
 /datum/antagonist/loyalists
 	id = MODE_LOYALIST
@@ -33,13 +33,13 @@ var/datum/antagonist/loyalists/loyalists
 
 /datum/antagonist/loyalists/New()
 	..()
-	loyalists = src
+	GLOB.loyalists = src
 
 /datum/antagonist/loyalists/create_global_objectives()
 	if(!..())
 		return
 	global_objectives = list()
-	for(var/mob/living/carbon/human/player in mob_list)
+	for(var/mob/living/carbon/human/player in GLOB.mob_list)
 		if(!player.mind || player.stat==2 || !(SSjob.is_job_in_department(player.mind.assigned_role, DEPARTMENT_COMMAND)))
 			continue
 		var/datum/objective/protect/loyal_obj = new

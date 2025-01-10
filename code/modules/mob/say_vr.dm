@@ -334,7 +334,7 @@
 			to_chat(M, span_psay(span_bold("You think \"[message]\"")))	//To us if we are the pred
 			if(M.read_preference(/datum/preference/toggle/subtle_sounds))
 				M << sound('sound/talksounds/subtle_sound.ogg', volume = 50)
-		for (var/mob/G in player_list)
+		for (var/mob/G in GLOB.player_list)
 			if (isnewplayer(G))
 				continue
 			else if(isobserver(G) &&  G.client?.prefs?.read_preference(/datum/preference/toggle/ghost_ears) && \
@@ -431,7 +431,7 @@
 			to_chat(M, span_pemote(span_bold("\The [M] [message]")))	//To us if we are the pred
 			if(M.read_preference(/datum/preference/toggle/subtle_sounds))
 				M << sound('sound/talksounds/subtle_sound.ogg', volume = 50)
-		for (var/mob/G in player_list)
+		for (var/mob/G in GLOB.player_list)
 			if (isnewplayer(G))
 				continue
 			else if(isobserver(G) && G.client?.prefs?.read_preference(/datum/preference/toggle/ghost_ears) && \
@@ -473,7 +473,7 @@
 		ourfreq = voice_freq
 
 	if(client)
-		playsound(T, pick(emote_sound), 25, TRUE, falloff = 1 , is_global = TRUE, frequency = ourfreq, ignore_walls = FALSE, preference = /datum/preference/toggle/emote_sounds)
+		playsound(T, pick(GLOB.emote_sound), 25, TRUE, falloff = 1 , is_global = TRUE, frequency = ourfreq, ignore_walls = FALSE, preference = /datum/preference/toggle/emote_sounds)
 
 	var/list/in_range = get_mobs_and_objs_in_view_fast(T,world.view,2,remote_ghosts = client ? TRUE : FALSE)
 	var/list/m_viewers = in_range["mobs"]
@@ -491,6 +491,6 @@
 	set name = "Select Speech Bubble"
 	set category = "OOC.Chat Settings"
 
-	var/new_speech_bubble = tgui_input_list(src, "Pick new voice (default for automatic selection)", "Character Preference", selectable_speech_bubbles)
+	var/new_speech_bubble = tgui_input_list(src, "Pick new voice (default for automatic selection)", "Character Preference", GLOB.selectable_speech_bubbles)
 	if(new_speech_bubble)
 		custom_speech_bubble = new_speech_bubble

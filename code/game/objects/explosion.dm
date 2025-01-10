@@ -31,7 +31,7 @@
 		far_dist += heavy_impact_range * 5
 		far_dist += devastation_range * 20
 		var/frequency = get_rand_frequency()
-		for(var/mob/M in player_list)
+		for(var/mob/M in GLOB.player_list)
 			if(M.z == epicenter.z)
 				var/turf/M_turf = get_turf(M)
 				var/dist = get_dist(M_turf, epicenter)
@@ -45,7 +45,7 @@
 
 		var/close = range(world.view+round(devastation_range,1), epicenter)
 		// to all distanced mobs play a different sound
-		for(var/mob/M in player_list)
+		for(var/mob/M in GLOB.player_list)
 			if(M.z == epicenter.z)
 				if(!(M in close))
 					// check if the mob can hear
@@ -58,10 +58,10 @@
 			log_game("Explosion with [shaped ? "shaped" : "non-shaped"] size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ")
 
 		var/approximate_intensity = (devastation_range * 3) + (heavy_impact_range * 2) + light_impact_range
-		var/powernet_rebuild_was_deferred_already = defer_powernet_rebuild
+		var/powernet_rebuild_was_deferred_already = GLOB.defer_powernet_rebuild
 		// Large enough explosion. For performance reasons, powernets will be rebuilt manually
-		if(!defer_powernet_rebuild && (approximate_intensity > 25))
-			defer_powernet_rebuild = 1
+		if(!GLOB.defer_powernet_rebuild && (approximate_intensity > 25))
+			GLOB.defer_powernet_rebuild = 1
 
 		if(heavy_impact_range > 1)
 			var/datum/effect/system/explosion/E = new/datum/effect/system/explosion()
@@ -96,15 +96,15 @@
 		if(Debug2) to_world_log("## DEBUG: Explosion([x0],[y0],[z0])(d[devastation_range],h[heavy_impact_range],l[light_impact_range]): Took [took] seconds.")
 
 		//Machines which report explosions.
-		for(var/i,i<=doppler_arrays.len,i++)
-			var/obj/machinery/doppler_array/Array = doppler_arrays[i]
+		for(var/i, i <= GLOB.doppler_arrays.len, i++)
+			var/obj/machinery/doppler_array/Array = GLOB.doppler_arrays[i]
 			if(Array)
 				Array.sense_explosion(x0,y0,z0,devastation_range,heavy_impact_range,light_impact_range,took)
 		sleep(8)
 
-		if(!powernet_rebuild_was_deferred_already && defer_powernet_rebuild)
+		if(!powernet_rebuild_was_deferred_already && GLOB.defer_powernet_rebuild)
 			SSmachines.makepowernets()
-			defer_powernet_rebuild = 0
+			GLOB.defer_powernet_rebuild = 0
 	return 1
 
 /proc/secondaryexplosion(turf/epicenter, range)

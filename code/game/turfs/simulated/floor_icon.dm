@@ -1,14 +1,14 @@
-var/list/flooring_cache = list()
+GLOBAL_LIST_EMPTY(flooring_cache)
 
-var/image/no_ceiling_image = null
+GLOBAL_DATUM(no_ceiling_image, /image)
 
 /hook/startup/proc/setup_no_ceiling_image()
 	cache_no_ceiling_image()
 	return TRUE
 
 /proc/cache_no_ceiling_image()
-	no_ceiling_image = image(icon = 'icons/turf/open_space.dmi', icon_state = "no_ceiling")
-	no_ceiling_image.plane = PLANE_MESONS
+	GLOB.no_ceiling_image = image(icon = 'icons/turf/open_space.dmi', icon_state = "no_ceiling")
+	GLOB.no_ceiling_image.plane = PLANE_MESONS
 
 /turf/simulated/floor/update_icon(var/update_neighbors)
 	cut_overlays()
@@ -25,7 +25,7 @@ var/image/no_ceiling_image = null
 			icon_state = flooring.icon_base
 									//VOREStation Addition Start
 			if(flooring.check_season)
-				icon_state = "[icon_state]-[world_time_season]"	//VOREStation Addition End
+				icon_state = "[icon_state]-[GLOB.world_time_season]"	//VOREStation Addition End
 			if(flooring.has_base_range)
 				icon_state = "[icon_state][rand(0,flooring.has_base_range)]"
 				flooring_override = icon_state
@@ -94,7 +94,7 @@ var/image/no_ceiling_image = null
 	// Show 'ceilingless' overlay.
 	var/turf/above = GetAbove(src)
 	if(!is_outdoors() && above && isopenspace(above)) // This won't apply to outdoor turfs since its assumed they don't have a ceiling anyways.
-		add_overlay(no_ceiling_image)
+		add_overlay(GLOB.no_ceiling_image)
 
 	// Update our 'them-to-us' edges, aka edges from external turfs we feel should spill onto us
 	if(edge_blending_priority && !forbid_turf_edge())
@@ -113,11 +113,11 @@ var/image/no_ceiling_image = null
 		// They don't forbid_turf_edge
 		if(istype(T) && T.edge_blending_priority && edge_blending_priority < T.edge_blending_priority && icon_state != T.icon_state && !T.forbid_turf_edge())
 			var/cache_key = "[T.get_edge_icon_state()]-[checkdir]" // Usually [icon_state]-[dirnum]
-			if(!turf_edge_cache[cache_key])
+			if(!GLOB.turf_edge_cache[cache_key])
 				var/image/I = image(icon = T.icon_edge, icon_state = "[T.get_edge_icon_state()]-edge", dir = checkdir, layer = ABOVE_TURF_LAYER) // VOREStation Edit - icon_edge
 				I.plane = TURF_PLANE
-				turf_edge_cache[cache_key] = I
-			add_overlay(turf_edge_cache[cache_key])
+				GLOB.turf_edge_cache[cache_key] = I
+			add_overlay(GLOB.turf_edge_cache[cache_key])
 
 // We will take this state and use it for a cache key, and append '-edge' to it to get the edge overlay (edges *from other turfs*, not our own internal edges)
 /turf/simulated/proc/get_edge_icon_state()
@@ -280,8 +280,8 @@ var/image/no_ceiling_image = null
 	return is_linked
 
 /turf/simulated/floor/proc/get_flooring_overlay(var/cache_key, var/icon_base, var/icon_dir = 0)
-	if(!flooring_cache[cache_key])
+	if(!GLOB.flooring_cache[cache_key])
 		var/image/I = image(icon = flooring.icon, icon_state = icon_base, dir = icon_dir)
 		I.layer = layer
-		flooring_cache[cache_key] = I
-	return flooring_cache[cache_key]
+		GLOB.flooring_cache[cache_key] = I
+	return GLOB.flooring_cache[cache_key]

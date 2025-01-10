@@ -166,7 +166,7 @@
 					var/DNAstring = tgui_input_text(usr, "Input DNA string to search for." , "Please Enter String." , "")
 					if(!DNAstring)
 						return
-					for(var/mob/living/carbon/M in mob_list)
+					for(var/mob/living/carbon/M in GLOB.mob_list)
 						if(!M.dna)
 							continue
 						if(M.dna.unique_enzymes == DNAstring)
@@ -212,7 +212,7 @@
 			worklocation()
 
 /obj/item/pinpointer/nukeop/proc/workdisk()
-	if(bomb_set)	//If the bomb is set, lead to the shuttle
+	if(GLOB.bomb_set)	//If the bomb is set, lead to the shuttle
 		mode = 1	//Ensures worklocation() continues to work
 		playsound(src, 'sound/machines/twobeep.ogg', 50, 1)	//Plays a beep
 		visible_message(span_notice("Shuttle Locator active."))			//Lets the mob holding it know that the mode has changed
@@ -237,7 +237,7 @@
 			icon_state = "pinonfar"
 
 /obj/item/pinpointer/nukeop/proc/worklocation()
-	if(!bomb_set)
+	if(!GLOB.bomb_set)
 		mode = 0
 		playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
 		visible_message(span_notice("Authentication Disk Locator active."))

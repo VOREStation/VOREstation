@@ -143,9 +143,9 @@
 	real_name = name
 	animate(src, pixel_y = 2, time = 10, loop = -1)
 	animate(pixel_y = default_pixel_y, time = 10, loop = -1)
-	observer_mob_list += src
+	GLOB.observer_mob_list += src
 	..()
-	visualnet = ghostnet
+	visualnet = GLOB.ghostnet
 
 /mob/observer/dead/proc/checkStatic()
 	return !(check_rights(R_ADMIN|R_FUN|R_EVENT|R_SERVER, 0, src) || (client && client.buildmode) || isbelly(loc))
@@ -159,7 +159,7 @@
 
 /mob/observer/dead/Topic(href, href_list)
 	if (href_list["track"])
-		var/mob/target = locate(href_list["track"]) in mob_list
+		var/mob/target = locate(href_list["track"]) in GLOB.mob_list
 		if(target)
 			ManualFollow(target)
 	if(href_list["reenter"])
@@ -305,14 +305,14 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		to_chat(usr, span_warning("Another consciousness is in your body... it is resisting you."))
 		return
 	//VOREStation Add
-	if(prevent_respawns.Find(mind.name))
+	if(GLOB.prevent_respawns.Find(mind.name))
 		to_chat(usr, span_warning("You already quit this round as this character, sorry!"))
 		return
 	//VOREStation Add End
 	if(mind.current.ajourn && mind.current.stat != DEAD) //check if the corpse is astral-journeying (it's client ghosted using a cultist rune).
 		var/found_rune
 		for(var/obj/effect/rune/R in mind.current.loc)   //whilst corpse is alive, we can only reenter the body if it's on the rune
-			if(R && R.word1 == cultwords["hell"] && R.word2 == cultwords["travel"] && R.word3 == cultwords["self"]) // Found an astral journey rune.
+			if(R && R.word1 == GLOB.cultwords["hell"] && R.word2 == GLOB.cultwords["travel"] && R.word3 == GLOB.cultwords["self"]) // Found an astral journey rune.
 				found_rune = 1
 				break
 		if(!found_rune)
@@ -593,7 +593,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		var/mob/M = following
 		M.following_mobs -= src
 	stop_following()
-	observer_mob_list -= src
+	GLOB.observer_mob_list -= src
 	return ..()
 
 /mob/Moved(atom/old_loc, direction, forced = FALSE)
@@ -612,7 +612,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(check_rights(R_ADMIN|R_FUN|R_EVENT, 0, src))
 		return 0
 
-	return (T && T.holy) && (is_manifest || (mind in cult.current_antagonists))
+	return (T && T.holy) && (is_manifest || (mind in GLOB.cult.current_antagonists))
 
 /mob/observer/dead/verb/jumptomob() //Moves the ghost instead of just changing the ghosts's eye -Nodrak
 	set category = "Ghost.Game"
@@ -778,7 +778,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	var/ghosts_can_write
 	if(ticker.mode.name == "cult")
-		if(cult.current_antagonists.len > CONFIG_GET(number/cult_ghostwriter_req_cultists))
+		if(GLOB.cult.current_antagonists.len > CONFIG_GET(number/cult_ghostwriter_req_cultists))
 			ghosts_can_write = 1
 
 	if(!ghosts_can_write && !check_rights(R_ADMIN|R_EVENT|R_FUN, 0)) //Let's allow for admins to write in blood for events and the such.
@@ -856,7 +856,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		)
 		toggle_ghost_visibility(TRUE)
 	else
-		var/datum/gender/T = gender_datums[user.get_visible_gender()]
+		var/datum/gender/T = GLOB.gender_datums[user.get_visible_gender()]
 		user.visible_message ( \
 			span_warning("\The [user] just tried to smash [T.his] book into that ghost!  It's not very effective."), \
 			span_warning("You get the feeling that the ghost can't become any more visible.") \

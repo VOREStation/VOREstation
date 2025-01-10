@@ -166,28 +166,28 @@
 				E.markings = marklist.Copy()
 
 		//Hair
-		var/hair = dna.GetUIValueRange(DNA_UI_HAIR_STYLE,hair_styles_list.len)
-		if((0 < hair) && (hair <= hair_styles_list.len))
-			H.h_style = hair_styles_list[hair]
+		var/hair = dna.GetUIValueRange(DNA_UI_HAIR_STYLE, GLOB.hair_styles_list.len)
+		if((0 < hair) && (hair <= GLOB.hair_styles_list.len))
+			H.h_style = GLOB.hair_styles_list[hair]
 
 		//Facial Hair
-		var/beard = dna.GetUIValueRange(DNA_UI_BEARD_STYLE,facial_hair_styles_list.len)
-		if((0 < beard) && (beard <= facial_hair_styles_list.len))
-			H.f_style = facial_hair_styles_list[beard]
+		var/beard = dna.GetUIValueRange(DNA_UI_BEARD_STYLE, GLOB.facial_hair_styles_list.len)
+		if((0 < beard) && (beard <= GLOB.facial_hair_styles_list.len))
+			H.f_style = GLOB.facial_hair_styles_list[beard]
 
 		// VORE StationEdit Start
 
 		// Ears
-		var/ears = dna.GetUIValueRange(DNA_UI_EAR_STYLE, ear_styles_list.len + 1) - 1
+		var/ears = dna.GetUIValueRange(DNA_UI_EAR_STYLE, GLOB.ear_styles_list.len + 1) - 1
 		if(ears < 1)
 			H.ear_style = null
-		else if((0 < ears) && (ears <= ear_styles_list.len))
-			H.ear_style = ear_styles_list[ear_styles_list[ears]]
-		var/ears_secondary = dna.GetUIValueRange(DNA_UI_EAR_SECONDARY_STYLE, ear_styles_list.len + 1) - 1
+		else if((0 < ears) && (ears <= GLOB.ear_styles_list.len))
+			H.ear_style = GLOB.ear_styles_list[GLOB.ear_styles_list[ears]]
+		var/ears_secondary = dna.GetUIValueRange(DNA_UI_EAR_SECONDARY_STYLE, GLOB.ear_styles_list.len + 1) - 1
 		if(ears_secondary < 1)
 			H.ear_secondary_style = null
-		else if((0 < ears_secondary) && (ears_secondary <= ear_styles_list.len))
-			H.ear_secondary_style = ear_styles_list[ear_styles_list[ears_secondary]]
+		else if((0 < ears_secondary) && (ears_secondary <= GLOB.ear_styles_list.len))
+			H.ear_secondary_style = GLOB.ear_styles_list[GLOB.ear_styles_list[ears_secondary]]
 
 		// Ear Color
 		H.r_ears  = dna.GetUIValueRange(DNA_UI_EARS_R,    255)
@@ -211,18 +211,18 @@
 			)
 
 		//Tail
-		var/tail = dna.GetUIValueRange(DNA_UI_TAIL_STYLE, tail_styles_list.len + 1) - 1
+		var/tail = dna.GetUIValueRange(DNA_UI_TAIL_STYLE, GLOB.tail_styles_list.len + 1) - 1
 		if(tail < 1)
 			H.tail_style = null
-		else if((0 < tail) && (tail <= tail_styles_list.len))
-			H.tail_style = tail_styles_list[tail_styles_list[tail]]
+		else if((0 < tail) && (tail <= GLOB.tail_styles_list.len))
+			H.tail_style = GLOB.tail_styles_list[GLOB.tail_styles_list[tail]]
 
 		//Wing
-		var/wing = dna.GetUIValueRange(DNA_UI_WING_STYLE, wing_styles_list.len + 1) - 1
+		var/wing = dna.GetUIValueRange(DNA_UI_WING_STYLE, GLOB.wing_styles_list.len + 1) - 1
 		if(wing < 1)
 			H.wing_style = null
-		else if((0 < wing) && (wing <= wing_styles_list.len))
-			H.wing_style = wing_styles_list[wing_styles_list[wing]]
+		else if((0 < wing) && (wing <= GLOB.wing_styles_list.len))
+			H.wing_style = GLOB.wing_styles_list[GLOB.wing_styles_list[wing]]
 
 		//Wing Color
 		H.r_wing   = dna.GetUIValueRange(DNA_UI_WING_R,    255)
@@ -236,9 +236,9 @@
 		H.b_wing3  = dna.GetUIValueRange(DNA_UI_WING3_B,    255)
 
 		// Playerscale
-		var/size = dna.GetUIValueRange(DNA_UI_PLAYERSCALE, player_sizes_list.len)
-		if((0 < size) && (size <= player_sizes_list.len))
-			H.resize(player_sizes_list[player_sizes_list[size]], TRUE, ignore_prefs = TRUE)
+		var/size = dna.GetUIValueRange(DNA_UI_PLAYERSCALE, GLOB.player_sizes_list.len)
+		if((0 < size) && (size <= GLOB.player_sizes_list.len))
+			H.resize(GLOB.player_sizes_list[GLOB.player_sizes_list[size]], TRUE, ignore_prefs = TRUE)
 
 		// Tail/Taur Color
 		H.r_tail   = dna.GetUIValueRange(DNA_UI_TAIL_R,    255)

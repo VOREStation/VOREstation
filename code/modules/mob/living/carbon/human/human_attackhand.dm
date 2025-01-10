@@ -3,7 +3,7 @@
 
 /mob/living/carbon/human/proc/get_unarmed_attack(var/mob/living/carbon/human/target, var/hit_zone)
 	// VOREStation Edit - Begin
-	if(nif && nif.flag_check(NIF_C_HARDCLAWS,NIF_FLAGS_COMBAT)){return unarmed_hardclaws}
+	if(nif && nif.flag_check(NIF_C_HARDCLAWS,NIF_FLAGS_COMBAT)){return GLOB.unarmed_hardclaws}
 	if(src.default_attack && src.default_attack.is_usable(src, target, hit_zone))
 		if(pulling_punches)
 			var/datum/unarmed_attack/soft_type = src.default_attack.get_sparring_variant()
@@ -35,7 +35,7 @@
 	return null
 
 /mob/living/carbon/human/attack_hand(mob/living/M as mob)
-	var/datum/gender/TT = gender_datums[M.get_visible_gender()]
+	var/datum/gender/TT = GLOB.gender_datums[M.get_visible_gender()]
 	var/mob/living/carbon/human/H = M
 	if(istype(H))
 		var/obj/item/organ/external/temp = H.organs_by_name["r_hand"]
@@ -439,7 +439,7 @@
 		to_chat(user,message)
 		return FALSE
 
-	var/datum/gender/TU = gender_datums[user.get_visible_gender()]
+	var/datum/gender/TU = GLOB.gender_datums[user.get_visible_gender()]
 
 	if(user == src)
 		user.visible_message(span_filter_notice("\The [user] starts applying pressure to [TU.his] [organ.name]!"), span_filter_notice("You start applying pressure to your [organ.name]!"))

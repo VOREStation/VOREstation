@@ -1,8 +1,9 @@
-var/list/admin_ranks = list()								//list of all ranks with associated rights
+GLOBAL_LIST_EMPTY(admin_ranks) //list of all ranks with associated rights
+GLOBAL_PROTECT(admin_ranks)
 
 //load our rank - > rights associations
 /proc/load_admin_ranks()
-	admin_ranks.Cut()
+	GLOB.admin_ranks.Cut()
 
 	var/previous_rights = 0
 
@@ -47,7 +48,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 				if("mod")						rights |= R_MOD
 				if("event")						rights |= R_EVENT
 
-		admin_ranks[rank] = rights
+		GLOB.admin_ranks[rank] = rights
 		previous_rights = rights
 
 	#ifdef TESTING
@@ -63,7 +64,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 
 /proc/load_admins()
 	//clear the datums references
-	admin_datums.Cut()
+	GLOB.admin_datums.Cut()
 	for(var/client/C in GLOB.admins)
 		C.remove_admin_verbs()
 		C.holder = null
@@ -94,7 +95,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 				rank = ckeyEx(List[2])
 
 			//load permissions associated with this rank
-			var/rights = admin_ranks[rank]
+			var/rights = GLOB.admin_ranks[rank]
 
 			//create the admin datum and store it for later use
 			var/datum/admins/D = new /datum/admins(rank, rights, ckey)
@@ -126,7 +127,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 
 			//find the client for a ckey if they are connected and associate them with the new admin datum
 			D.associate(GLOB.directory[ckey])
-		if(!admin_datums)
+		if(!GLOB.admin_datums)
 			error("The database query in load_admins() resulted in no admins being added to the list. Reverting to legacy system.")
 			log_misc("The database query in load_admins() resulted in no admins being added to the list. Reverting to legacy system.")
 			CONFIG_SET(flag/admin_legacy_system, TRUE)

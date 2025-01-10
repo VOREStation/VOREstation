@@ -3,7 +3,7 @@
 #define SHELLEO_STDOUT 2
 #define SHELLEO_STDERR 3
 
-var/list/sounds_cache = list()
+GLOBAL_LIST_EMPTY(sounds_cache)
 
 /client/proc/play_sound(S as sound)
 	set category = "Fun.Sounds"
@@ -27,7 +27,7 @@ var/list/sounds_cache = list()
 	admin_sound.status = SOUND_STREAM
 	admin_sound.volume = vol
 
-	sounds_cache += S
+	GLOB.sounds_cache += S
 
 	var/res = tgui_alert(usr, "Show the title of this song ([S]) to the players?\nOptions 'Yes' and 'No' will play the sound.",, list("Yes", "No", "Cancel"))
 	if(!res)
@@ -41,7 +41,7 @@ var/list/sounds_cache = list()
 	log_admin("[key_name(src)] played sound [S]")
 	message_admins("[key_name_admin(src)] played sound [S]", 1)
 
-	for(var/mob/M in player_list)
+	for(var/mob/M in GLOB.player_list)
 		if(M.read_preference(/datum/preference/toggle/play_admin_midis))
 			admin_sound.volume = vol * M.client.admin_music_volume
 			SEND_SOUND(M, admin_sound)
@@ -67,7 +67,7 @@ var/list/sounds_cache = list()
 		return
 
 	if(!M)
-		M = tgui_input_list(usr, "Choose a mob to play the sound to. Only they will hear it.", "Play Mob Sound", sortNames(player_list))
+		M = tgui_input_list(usr, "Choose a mob to play the sound to. Only they will hear it.", "Play Mob Sound", sortNames(GLOB.player_list))
 	if(!M || QDELETED(M))
 		return
 	log_admin("[key_name(src)] played a direct mob sound [S] to [M].")
@@ -83,14 +83,14 @@ var/list/sounds_cache = list()
 	var/sound/uploaded_sound = sound(S, repeat = 0, wait = 1, channel = 777)
 	uploaded_sound.priority = 250
 
-	sounds_cache += S
+	GLOB.sounds_cache += S
 
 	if(tgui_alert(usr, "Do you ready?\nSong: [S]\nNow you can also play this sound using \"Play Server Sound\".", "Confirmation request", list("Play","Cancel")) != "Play")
 		return
 
 	log_admin("[key_name(src)] played sound [S] on Z[target_z]")
 	message_admins("[key_name_admin(src)] played sound [S] on Z[target_z]", 1)
-	for(var/mob/M in player_list)
+	for(var/mob/M in GLOB.player_list)
 		if(M.read_preference(/datum/preference/toggle/play_admin_midis) && M.z == target_z)
 			M << uploaded_sound
 
@@ -105,7 +105,7 @@ var/list/sounds_cache = list()
 
 	var/list/sounds = file2list("sound/serversound_list.txt");
 	sounds += "--CANCEL--"
-	sounds += sounds_cache
+	sounds += GLOB.sounds_cache
 
 	var/melody = tgui_input_list(usr, "Select a sound from the server to play", "Server sound list", sounds, "--CANCEL--")
 
@@ -201,7 +201,7 @@ var/list/sounds_cache = list()
 
 		return
 	if(web_sound_url || stop_web_sounds)
-		for(var/m in player_list)
+		for(var/m in GLOB.player_list)
 			var/mob/M = m
 			var/client/C = M.client
 			if(C.prefs?.read_preference(/datum/preference/toggle/play_admin_midis))
@@ -250,7 +250,7 @@ var/list/sounds_cache = list()
 
 	log_admin("[key_name(src)] stopped all currently playing sounds.")
 	message_admins("[key_name_admin(src)] stopped all currently playing sounds.")
-	for(var/mob/M in player_list)
+	for(var/mob/M in GLOB.player_list)
 		SEND_SOUND(M, sound(null))
 		var/client/C = M.client
 		C?.tgui_panel?.stop_music()
@@ -269,7 +269,7 @@ var/list/sounds_cache = list()
 	set name = "Cuban Pete Time"
 
 	message_admins("[key_name_admin(usr)] has declared Cuban Pete Time!", 1)
-	for(var/mob/M in player_list)
+	for(var/mob/M in GLOB.player_list)
 		if(M.client)
 			if(M.client.midis)
 				M << 'cubanpetetime.ogg'
@@ -285,7 +285,7 @@ var/list/sounds_cache = list()
 	set name = "Banana Phone"
 
 	message_admins("[key_name_admin(usr)] has activated Banana Phone!", 1)
-	for(var/mob/M in player_list)
+	for(var/mob/M in GLOB.player_list)
 		if(M.client)
 			if(M.client.midis)
 				M << 'bananaphone.ogg'
@@ -296,7 +296,7 @@ var/list/sounds_cache = list()
 	set name = "Space Asshole"
 
 	message_admins("[key_name_admin(usr)] has played the Space Asshole Hymn.", 1)
-	for(var/mob/M in player_list)
+	for(var/mob/M in GLOB.player_list)
 		if(M.client)
 			if(M.client.midis)
 				M << 'sound/music/space_asshole.ogg'
@@ -307,7 +307,7 @@ var/list/sounds_cache = list()
 	set name = "Honk"
 
 	message_admins("[key_name_admin(usr)] has creeped everyone out with Blackest Honks.", 1)
-	for(var/mob/M in player_list)
+	for(var/mob/M in GLOB.player_list)
 		if(M.client)
 			if(M.client.midis)
 				M << 'honk_theme.ogg'*/

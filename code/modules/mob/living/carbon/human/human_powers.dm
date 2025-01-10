@@ -11,15 +11,15 @@
 		return
 
 	if(h_style)
-		var/datum/sprite_accessory/hair/hair_style = hair_styles_list[h_style]
+		var/datum/sprite_accessory/hair/hair_style = GLOB.hair_styles_list[h_style]
 		var/selected_string
 		if(!(hair_style.flags & HAIR_TIEABLE))
 			to_chat(src, span_warning("Your hair isn't long enough to tie."))
 			return
 		else
 			var/list/datum/sprite_accessory/hair/valid_hairstyles = list()
-			for(var/hair_string in hair_styles_list)
-				var/datum/sprite_accessory/hair/test = hair_styles_list[hair_string]
+			for(var/hair_string in GLOB.hair_styles_list)
+				var/datum/sprite_accessory/hair/test = GLOB.hair_styles_list[hair_string]
 				if(test.flags & HAIR_TIEABLE)
 					valid_hairstyles.Add(hair_string)
 			selected_string = tgui_input_list(usr, "Select a new hairstyle", "Your hairstyle", valid_hairstyles)
@@ -363,7 +363,7 @@
 	if(!E)
 		to_chat(src,span_warning("You don't seem to have a head!"))
 		return
-	var/datum/robolimb/robohead = all_robolimbs[E.model]
+	var/datum/robolimb/robohead = GLOB.all_robolimbs[E.model]
 	if(!robohead.monitor_styles || !robohead.monitor_icon)
 		to_chat(src,span_warning("Your head doesn't have a monitor, or it doesn't support being changed!"))
 		return

@@ -97,8 +97,8 @@
 	// Software we have not bought
 	var/list/not_bought_software = list()
 
-	for(var/key in pai_software_by_key)
-		var/datum/pai_software/S = pai_software_by_key[key]
+	for(var/key in GLOB.pai_software_by_key)
+		var/datum/pai_software/S = GLOB.pai_software_by_key[key]
 		var/software_data[0]
 		if(istype(S, /datum/pai_software/directives) && !emagged)
 			continue
@@ -117,10 +117,10 @@
 
 	// Emotions
 	var/list/emotions = list()
-	for(var/name in pai_emotions)
+	for(var/name in GLOB.pai_emotions)
 		var/list/emote = list()
 		emote["name"] = name
-		emote["id"] = pai_emotions[name]
+		emote["id"] = GLOB.pai_emotions[name]
 		emotions.Add(list(emote))
 
 	data["emotions"] = emotions

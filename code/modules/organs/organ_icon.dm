@@ -1,4 +1,4 @@
-var/global/list/limb_icon_cache = list()
+GLOBAL_LIST_EMPTY(limb_icon_cache)
 
 /obj/item/organ/external/set_dir()
 	return
@@ -17,7 +17,7 @@ var/global/list/limb_icon_cache = list()
 	s_col = null
 	h_col = null
 	if(robotic >= ORGAN_ROBOT)
-		var/datum/robolimb/franchise = all_robolimbs[model]
+		var/datum/robolimb/franchise = GLOB.all_robolimbs[model]
 		if(!(franchise && franchise.skin_tone) && !(franchise && franchise.skin_color))
 			if(human.synth_color)
 				s_col = list(human.r_synth, human.g_synth, human.b_synth)
@@ -35,7 +35,7 @@ var/global/list/limb_icon_cache = list()
 	s_col = null
 	h_col = null
 	if(robotic >= ORGAN_ROBOT)
-		var/datum/robolimb/franchise = all_robolimbs[model]
+		var/datum/robolimb/franchise = GLOB.all_robolimbs[model]
 		if(!(franchise && franchise.skin_tone) && !(franchise && franchise.skin_color))
 			return
 	if(!isnull(dna.GetUIValue(DNA_UI_SKIN_TONE)) && (species.appearance_flags & HAS_SKIN_TONE))
@@ -55,7 +55,7 @@ var/global/list/limb_icon_cache = list()
 	var/image/res = image('icons/mob/human_face.dmi',"bald_s")
 	//Facial hair
 	if(owner.f_style)
-		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[owner.f_style]
+		var/datum/sprite_accessory/facial_hair_style = GLOB.facial_hair_styles_list[owner.f_style]
 		if(facial_hair_style && facial_hair_style.species_allowed && (species.get_bodytype(owner) in facial_hair_style.species_allowed))
 			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
 			if(facial_hair_style.do_colouration)
@@ -65,10 +65,10 @@ var/global/list/limb_icon_cache = list()
 	//Head hair
 	if(owner.h_style)
 		var/style = owner.h_style
-		var/datum/sprite_accessory/hair/hair_style = hair_styles_list[style]
+		var/datum/sprite_accessory/hair/hair_style = GLOB.hair_styles_list[style]
 		if(owner.head && (owner.head.flags_inv & BLOCKHEADHAIR))
 			if(!(hair_style.flags & HAIR_VERY_SHORT))
-				hair_style = hair_styles_list["Short Hair"]
+				hair_style = GLOB.hair_styles_list["Short Hair"]
 		if(hair_style && (species.get_bodytype(owner) in hair_style.species_allowed))
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
 			var/icon/hair_s_add = new/icon("icon" = hair_style.icon_add, "icon_state" = "[hair_style.icon_state]_s")
@@ -173,11 +173,11 @@ var/global/list/limb_icon_cache = list()
 
 			if(body_hair && islist(h_col) && h_col.len >= 3)
 				var/cache_key = "[body_hair]-[icon_name]-[h_col[1]][h_col[2]][h_col[3]]"
-				if(!limb_icon_cache[cache_key])
+				if(!GLOB.limb_icon_cache[cache_key])
 					var/icon/I = icon(species.get_icobase(owner), "[icon_name]_[body_hair]")
 					I.Blend(rgb(h_col[1],h_col[2],h_col[3]), ICON_MULTIPLY) //VOREStation edit
-					limb_icon_cache[cache_key] = I
-				mob_icon.Blend(limb_icon_cache[cache_key], ICON_OVERLAY)
+					GLOB.limb_icon_cache[cache_key] = I
+				mob_icon.Blend(GLOB.limb_icon_cache[cache_key], ICON_OVERLAY)
 
 			// VOREStation edit start
 			if(nail_polish)
@@ -205,11 +205,11 @@ var/global/list/limb_icon_cache = list()
 
 		if(body_hair && islist(h_col) && h_col.len >= 3)
 			var/cache_key = "[body_hair]-[icon_name]-[h_col[1]][h_col[2]][h_col[3]]"
-			if(!limb_icon_cache[cache_key])
+			if(!GLOB.limb_icon_cache[cache_key])
 				var/icon/I = icon(species.get_icobase(owner), "[icon_name]_[body_hair]")
 				I.Blend(rgb(h_col[1],h_col[2],h_col[3]), ICON_MULTIPLY) //VOREStation edit
-				limb_icon_cache[cache_key] = I
-			mob_icon.Blend(limb_icon_cache[cache_key], ICON_OVERLAY)
+				GLOB.limb_icon_cache[cache_key] = I
+			mob_icon.Blend(GLOB.limb_icon_cache[cache_key], ICON_OVERLAY)
 		// VOREStation edit ends here
 
 	if (transparent && !istype(src,/obj/item/organ/external/head) && can_apply_transparency && should_apply_transparency) //VORESTATION EDIT: transparent instead of nonsolid
@@ -278,9 +278,9 @@ var/list/robot_hud_colours = list("#CFCFCF","#AFAFAF","#8F8F8F","#6F6F6F","#4F4F
 	// This looks convoluted, but it's this way to avoid icon proc calls.
 	if(!hud_damage_image)
 		var/cache_key = "dambase-[icon_cache_key]"
-		if(!icon_cache_key || !limb_icon_cache[cache_key])
-			limb_icon_cache[cache_key] = icon(get_icon(), null, SOUTH)
-		var/image/temp = image(limb_icon_cache[cache_key])
+		if(!icon_cache_key || !GLOB.limb_icon_cache[cache_key])
+			GLOB.limb_icon_cache[cache_key] = icon(get_icon(), null, SOUTH)
+		var/image/temp = image(GLOB.limb_icon_cache[cache_key])
 		if((robotic < ORGAN_ROBOT) && species)
 			// Calculate the required colour matrix.
 			var/r = 0.30 * species.health_hud_intensity
@@ -288,7 +288,7 @@ var/list/robot_hud_colours = list("#CFCFCF","#AFAFAF","#8F8F8F","#6F6F6F","#4F4F
 			var/b = 0.11 * species.health_hud_intensity
 			temp.color = list(r, r, r, g, g, g, b, b, b)
 		else if(model)
-			var/datum/robolimb/R = all_robolimbs[model]
+			var/datum/robolimb/R = GLOB.all_robolimbs[model]
 			if(istype(R))
 				var/r = 0.30 * R.health_hud_intensity
 				var/g = 0.59 * R.health_hud_intensity

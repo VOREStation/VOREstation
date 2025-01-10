@@ -3,7 +3,7 @@
 
 	//Prime this list if we need it.
 	if(has_huds)
-		add_overlay(backplane,TRUE) //Strap this on here, to block HUDs from appearing in rightclick menus: http://www.byond.com/forum/?post=2336679
+		add_overlay(GLOB.backplane, TRUE) //Strap this on here, to block HUDs from appearing in rightclick menus: http://www.byond.com/forum/?post=2336679
 		hud_list = list()
 		hud_list.len = TOTAL_HUDS
 		make_hud_overlays()
@@ -692,8 +692,8 @@
 
 	// remove the character from the list of the dead
 	if(stat == DEAD)
-		dead_mob_list -= src
-		living_mob_list += src
+		GLOB.dead_mob_list -= src
+		GLOB.living_mob_list += src
 		tod = null
 		timeofdeath = 0
 

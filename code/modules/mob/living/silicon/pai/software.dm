@@ -1,4 +1,4 @@
-var/list/pai_emotions = list(
+GLOBAL_LIST_INIT(pai_emotions, list(
 		"Neutral" = 1,
 		"What" = 2,
 		"Happy" = 3,
@@ -15,28 +15,28 @@ var/list/pai_emotions = list(
 		"Question Mark" = 14,
 		"Blank" = 15,
 		"Off" = 16
-	)
+	))
 
 
-var/global/list/pai_software_by_key = list()
-var/global/list/default_pai_software = list()
+GLOBAL_LIST_EMPTY(pai_software_by_key)
+GLOBAL_LIST_EMPTY(default_pai_software)
 /hook/startup/proc/populate_pai_software_list()
 	var/r = 1 // I would use ., but it'd sacrifice runtime detection
 	for(var/type in subtypesof(/datum/pai_software))
 		var/datum/pai_software/P = new type()
-		if(pai_software_by_key[P.id])
-			var/datum/pai_software/O = pai_software_by_key[P.id]
+		if(GLOB.pai_software_by_key[P.id])
+			var/datum/pai_software/O = GLOB.pai_software_by_key[P.id]
 			to_world(span_warning("pAI software module [P.name] has the same key as [O.name]!"))
 			r = 0
 			continue
-		pai_software_by_key[P.id] = P
+		GLOB.pai_software_by_key[P.id] = P
 		if(P.default)
-			default_pai_software[P.id] = P
+			GLOB.default_pai_software[P.id] = P
 	return r
 
 /mob/living/silicon/pai/New()
 	..()
-	software = default_pai_software.Copy()
+	software = GLOB.default_pai_software.Copy()
 
 /mob/living/silicon/pai/verb/paiInterface()
 	set category = "Abilities.pAI Commands"
@@ -61,8 +61,8 @@ var/global/list/default_pai_software = list()
 	// Software we have not bought
 	var/list/not_bought_software = list()
 
-	for(var/key in pai_software_by_key)
-		var/datum/pai_software/S = pai_software_by_key[key]
+	for(var/key in GLOB.pai_software_by_key)
+		var/datum/pai_software/S = GLOB.pai_software_by_key[key]
 		var/software_data[0]
 		software_data["name"] = S.name
 		software_data["id"] = S.id
@@ -79,10 +79,10 @@ var/global/list/default_pai_software = list()
 
 	// Emotions
 	var/list/emotions = list()
-	for(var/name in pai_emotions)
+	for(var/name in GLOB.pai_emotions)
 		var/list/emote = list()
 		emote["name"] = name
-		emote["id"] = pai_emotions[name]
+		emote["id"] = GLOB.pai_emotions[name]
 		emotions.Add(list(emote))
 
 	data["emotions"] = emotions
@@ -106,7 +106,7 @@ var/global/list/default_pai_software = list()
 
 		if("purchase")
 			var/soft = params["purchase"]
-			var/datum/pai_software/S = pai_software_by_key[soft]
+			var/datum/pai_software/S = GLOB.pai_software_by_key[soft]
 			if(S && (ram >= S.ram_cost))
 				ram -= S.ram_cost
 				software[S.id] = S
@@ -114,6 +114,6 @@ var/global/list/default_pai_software = list()
 
 		if("image")
 			var/img = text2num(params["image"])
-			if(1 <= img && img <= (pai_emotions.len))
+			if(1 <= img && img <= (GLOB.pai_emotions.len))
 				card.setEmotion(img)
 			return TRUE

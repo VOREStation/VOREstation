@@ -1,9 +1,9 @@
-var/datum/antagonist/cultist/cult
+GLOBAL_DATUM(cult, /datum/antagonist/cultist)
 
 /proc/iscultist(var/mob/player)
-	if(!cult || !player.mind)
+	if(!GLOB.cult || !player.mind)
 		return 0
-	if(player.mind in cult.current_antagonists)
+	if(player.mind in GLOB.cult.current_antagonists)
 		return 1
 
 /datum/antagonist/cultist
@@ -40,7 +40,7 @@ var/datum/antagonist/cultist/cult
 
 /datum/antagonist/cultist/New()
 	..()
-	cult = src
+	GLOB.cult = src
 
 /datum/antagonist/cultist/create_global_objectives()
 
@@ -94,10 +94,10 @@ var/datum/antagonist/cultist/cult
 			word = pick(allwords)
 
 	// Ensure runes are randomized.
-	if(!cultwords["travel"])
+	if(!GLOB.cultwords["travel"])
 		runerandom()
 
-	var/wordexp = "[cultwords[word]] is [word]..."
+	var/wordexp = "[GLOB.cultwords[word]] is [word]..."
 	to_chat(cult_mob, span_warning("You remember one thing from the dark teachings of your master... [wordexp]"))
 	cult_mob.mind.store_memory("You remember that <B>[wordexp]</B>", 0, 0)
 

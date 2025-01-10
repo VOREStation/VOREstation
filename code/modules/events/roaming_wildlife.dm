@@ -7,10 +7,10 @@
 
 /datum/event/roaming_wildlife/start()
 	var/list/possible_spawns = list()
-	for(var/obj/effect/landmark/C in landmarks_list)
+	for(var/obj/effect/landmark/C in GLOB.landmarks_list)
 		if(istype(C, /obj/effect/landmark/wildlife))
 			var/obj/effect/landmark/wildlife/WLLM = C
-			if(world_time_season == "winter" && WLLM.wildlife_type == 1)		//fish forbidden in winter because ice now aparently
+			if(GLOB.world_time_season == "winter" && WLLM.wildlife_type == 1)		//fish forbidden in winter because ice now aparently
 				continue
 			possible_spawns.Add(C)
 
